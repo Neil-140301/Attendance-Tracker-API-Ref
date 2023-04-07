@@ -1,0 +1,9 @@
+get:
+  summary: Get the API status
+  responses:
+    default:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: string

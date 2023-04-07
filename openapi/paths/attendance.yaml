@@ -1,0 +1,67 @@
+get:
+  summary: Get attendance records
+  parameters:
+    - in: query
+      name: search
+      schema:
+        type: string
+      description: Search query for filtering attendance records
+    - in: query
+      name: page
+      schema:
+        type: integer
+      description: Page number for pagination
+    - in: query
+      name: limit
+      schema:
+        type: integer
+      description: Number of records per page for pagination
+    - in: query
+      name: year
+      schema:
+        type: string
+      description: Year filter for attendance records
+    - in: query
+      name: dept
+      schema:
+        type: string
+      description: Department filter for attendance records
+    - in: query
+      name: programme
+      schema:
+        type: string
+      description: Programme filter for attendance records
+  responses:
+    '200':
+      description: >-
+        A list of attendance records and a flag indicating if there are more
+        records available.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              hasNext:
+                type: boolean
+              results:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    added_date:
+                      type: string
+                      format: date
+                    classes_attended:
+                      type: integer
+                    course:
+                      $ref: ..\components\schemas\Course.yaml
+                    id:
+                      type: integer
+                    student:
+                      $ref: ..\components\schemas\Student.yaml
+                    student_id:
+                      type: string
+                    student_name:
+                      type: string
+                    total_classes:
+                      type: integer

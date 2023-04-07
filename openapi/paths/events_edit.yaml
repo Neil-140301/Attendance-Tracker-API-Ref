@@ -1,0 +1,25 @@
+post:
+  summary: Edit an existing event
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            id:
+              type: integer
+            name:
+              type: string
+            end_date:
+              type: string
+              format: date-time
+            desc:
+              type: string
+            absentees:
+              type: array
+              items:
+                type: string
+  responses:
+    default:
+      description: The updated event.

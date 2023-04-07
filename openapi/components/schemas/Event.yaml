@@ -1,0 +1,13 @@
+type: object
+properties:
+  created_by:
+    type: string
+  desc:
+    type: string
+  end_date:
+    type: string
+    format: date-time
+  id:
+    type: integer
+  name:
+    type: string

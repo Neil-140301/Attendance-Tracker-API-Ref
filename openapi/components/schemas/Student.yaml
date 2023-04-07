@@ -1,0 +1,14 @@
+type: object
+properties:
+  email:
+    type: string
+  hostel:
+    type: string
+  id:
+    type: integer
+  phone:
+    type: string
+  roll_no:
+    type: string
+  room_no:
+    type: string

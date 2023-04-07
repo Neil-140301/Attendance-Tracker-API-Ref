@@ -1,0 +1,308 @@
+openapi: 3.1.0
+info:
+  title: Attendance Tracker API
+  version: 1.0.0
+servers:
+  - url: http://localhost:5000
+security: []
+paths:
+  /:
+    get:
+      summary: Get the API status
+      responses:
+        default:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: string
+  /absentees:
+    get:
+      summary: Get absentees data
+      parameters:
+        - name: user
+          in: query
+          description: The logged in user email
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    event:
+                      $ref: '#/components/schemas/Event'
+                    event_id:
+                      type: integer
+                    id:
+                      type: integer
+                    student:
+                      $ref: '#/components/schemas/Student'
+  /attendance:
+    get:
+      summary: Get attendance records
+      parameters:
+        - in: query
+          name: search
+          schema:
+            type: string
+          description: Search query for filtering attendance records
+        - in: query
+          name: page
+          schema:
+            type: integer
+          description: Page number for pagination
+        - in: query
+          name: limit
+          schema:
+            type: integer
+          description: Number of records per page for pagination
+        - in: query
+          name: year
+          schema:
+            type: string
+          description: Year filter for attendance records
+        - in: query
+          name: dept
+          schema:
+            type: string
+          description: Department filter for attendance records
+        - in: query
+          name: programme
+          schema:
+            type: string
+          description: Programme filter for attendance records
+      responses:
+        '200':
+          description: A list of attendance records and a flag indicating if there are more records available.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  hasNext:
+                    type: boolean
+                  results:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        added_date:
+                          type: string
+                          format: date
+                        classes_attended:
+                          type: integer
+                        course:
+                          $ref: '#/components/schemas/Course'
+                        id:
+                          type: integer
+                        student:
+                          $ref: '#/components/schemas/Student'
+                        student_id:
+                          type: string
+                        student_name:
+                          type: string
+                        total_classes:
+                          type: integer
+  /events:
+    get:
+      summary: Get events
+      parameters:
+        - in: query
+          name: by
+          required: true
+          schema:
+            type: string
+          description: Filter events by creator
+      responses:
+        '200':
+          description: A list of events.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    absentees:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          event:
+                            $ref: '#/components/schemas/Event'
+                          event_id:
+                            type: integer
+                          id:
+                            type: integer
+                          student:
+                            $ref: '#/components/schemas/Student'
+                    created_by:
+                      type: string
+                    desc:
+                      type: string
+                    end_date:
+                      type: string
+                      format: date-time
+                    id:
+                      type: integer
+                    name:
+                      type: string
+  /events/add:
+    post:
+      summary: Add a new event
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                end_date:
+                  type: string
+                  format: date-time
+                created_by:
+                  type: string
+                desc:
+                  type: string
+                absentees:
+                  type: array
+                  items:
+                    type: string
+      responses:
+        '200':
+          description: The newly created event.
+        '400':
+          description: Validation error.
+  /events/edit:
+    post:
+      summary: Edit an existing event
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+                name:
+                  type: string
+                end_date:
+                  type: string
+                  format: date-time
+                desc:
+                  type: string
+                absentees:
+                  type: array
+                  items:
+                    type: string
+      responses:
+        default:
+          description: The updated event.
+  /events/delete/{event_id}:
+    post:
+      summary: Delete an event
+      parameters:
+        - in: path
+          name: event_id
+          schema:
+            type: integer
+          required: true
+          description: The ID of the event to delete
+      responses:
+        '200':
+          description: The event was deleted successfully.
+  /students/upload:
+    post:
+      summary: Upload a file of student records
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                students-file:
+                  type: string
+                  format: binary
+      responses:
+        '400':
+          description: No file was selected or the file format was invalid.
+        default:
+          description: The file was uploaded successfully.
+  /upload:
+    post:
+      summary: Upload a file of attendance records
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                course-code:
+                  type: string
+                course-name:
+                  type: string
+                course-instructor:
+                  type: string
+                course-total-classes:
+                  type: integer
+                attendance-file:
+                  type: string
+                  format: binary
+      responses:
+        '400':
+          description: No file was selected or the file format was invalid.
+        default:
+          description: The file was uploaded successfully.
+components:
+  schemas:
+    Event:
+      type: object
+      properties:
+        created_by:
+          type: string
+        desc:
+          type: string
+        end_date:
+          type: string
+          format: date-time
+        id:
+          type: integer
+        name:
+          type: string
+    Student:
+      type: object
+      properties:
+        email:
+          type: string
+        hostel:
+          type: string
+        id:
+          type: integer
+        phone:
+          type: string
+        roll_no:
+          type: string
+        room_no:
+          type: string
+    Course:
+      type: object
+      properties:
+        code:
+          type: string
+        id:
+          type: integer
+        instructor:
+          type: string
+        name:
+          type: string

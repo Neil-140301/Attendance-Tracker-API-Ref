@@ -1,0 +1,43 @@
+get:
+  summary: Get events
+  parameters:
+    - in: query
+      name: by
+      required: true
+      schema:
+        type: string
+      description: Filter events by creator
+  responses:
+    '200':
+      description: A list of events.
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              type: object
+              properties:
+                absentees:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      event:
+                        $ref: ..\components\schemas\Event.yaml
+                      event_id:
+                        type: integer
+                      id:
+                        type: integer
+                      student:
+                        $ref: ..\components\schemas\Student.yaml
+                created_by:
+                  type: string
+                desc:
+                  type: string
+                end_date:
+                  type: string
+                  format: date-time
+                id:
+                  type: integer
+                name:
+                  type: string

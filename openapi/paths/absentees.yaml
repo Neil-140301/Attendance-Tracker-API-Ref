@@ -1,0 +1,26 @@
+get:
+  summary: Get absentees data
+  parameters:
+    - name: user
+      in: query
+      description: The logged in user email
+      schema:
+        type: string
+  responses:
+    '200':
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              type: object
+              properties:
+                event:
+                  $ref: ..\components\schemas\Event.yaml
+                event_id:
+                  type: integer
+                id:
+                  type: integer
+                student:
+                  $ref: ..\components\schemas\Student.yaml

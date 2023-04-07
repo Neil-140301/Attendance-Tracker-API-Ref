@@ -1,0 +1,12 @@
+post:
+  summary: Delete an event
+  parameters:
+    - in: path
+      name: event_id
+      schema:
+        type: integer
+      required: true
+      description: The ID of the event to delete
+  responses:
+    '200':
+      description: The event was deleted successfully.
