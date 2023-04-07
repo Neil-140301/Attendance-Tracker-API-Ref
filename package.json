@@ -6,8 +6,10 @@
   },
   "private": true,
   "scripts": {
-    "start": "redocly preview-docs",
-    "build": "redocly bundle -o dist",
-    "test": "redocly lint"
+    "build": " redocly bundle ../openapi/openapi.yaml -o dist.json",
+    "bundle": "redocly bundle openapi.yaml --output bundled.yaml",
+    "lint": "redocly lint bundled.yaml",
+    "split": "redocly split bundled.yaml --outDir .",
+    "preview": "redocly preview-docs bundled.yaml"
   }
 }
